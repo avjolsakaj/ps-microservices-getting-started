@@ -22,7 +22,7 @@ namespace GloboTicket.Services.ShoppingBasket.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{basketId}", Name = "GetBasket")]
+        [HttpGet("{basketId:guid}", Name = "GetBasket")]
         public async Task<ActionResult<Basket>> Get(Guid basketId)
         {
             var basket = await _basketRepository.GetBasketById(basketId);

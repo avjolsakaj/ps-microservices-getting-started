@@ -26,14 +26,12 @@ namespace GloboTicket.Web.Controllers
         {
             var currentBasketId = Request.Cookies.GetCurrentBasketId(settings);
 
-            var getBasket = currentBasketId == Guid.Empty ? Task.FromResult<Basket>(null) :
-                shoppingBasketService.GetBasket(currentBasketId);
+            var getBasket = currentBasketId == Guid.Empty ? Task.FromResult<Basket>(null) : shoppingBasketService.GetBasket(currentBasketId);
             var getCategories = eventCatalogService.GetCategories();
-            var getEvents = categoryId == Guid.Empty ? eventCatalogService.GetAll() :
-                eventCatalogService.GetByCategoryId(categoryId);
-            await Task.WhenAll(new Task[] { getBasket, getCategories, getEvents });
+            var getEvents = categoryId == Guid.Empty ? eventCatalogService.GetAll() : eventCatalogService.GetByCategoryId(categoryId);
+            await Task.WhenAll(getBasket, getCategories, getEvents);
 
-            var numberOfItems = getBasket.Result == null ? 0 : getBasket.Result.NumberOfItems;
+            var numberOfItems = getBasket.Result?.NumberOfItems ?? 0;
 
             return View(
                 new EventListModel
@@ -47,7 +45,7 @@ namespace GloboTicket.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult SelectCategory([FromForm]Guid selectedCategory)
+        public IActionResult SelectCategory([FromForm] Guid selectedCategory)
         {
             return RedirectToAction("Index", new { categoryId = selectedCategory });
         }

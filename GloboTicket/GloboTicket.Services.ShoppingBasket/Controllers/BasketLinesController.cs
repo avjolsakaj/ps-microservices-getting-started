@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GloboTicket.Services.ShoppingBasket.Controllers
 {
-    [Route("api/baskets/{basketId}/basketlines")]
+    [Route("api/baskets/{basketId:guid}/basketlines")]
     [ApiController]
     public class BasketLinesController : ControllerBase
     {
@@ -42,9 +42,8 @@ namespace GloboTicket.Services.ShoppingBasket.Controllers
             return Ok(_mapper.Map<IEnumerable<BasketLine>>(basketLines));             
         }
 
-        [HttpGet("{basketLineId}", Name = "GetBasketLine")]
-        public async Task<ActionResult<BasketLine>> Get(Guid basketId, 
-            Guid basketLineId)
+        [HttpGet("{basketLineId:guid}", Name = "GetBasketLine")]
+        public async Task<ActionResult<BasketLine>> Get(Guid basketId, Guid basketLineId)
         {
             if (!await _basketRepository.BasketExists(basketId))
             {
@@ -61,8 +60,7 @@ namespace GloboTicket.Services.ShoppingBasket.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BasketLine>> Post(Guid basketId, 
-            [FromBody] BasketLineForCreation basketLineForCreation)
+        public async Task<ActionResult<BasketLine>> Post(Guid basketId, [FromBody] BasketLineForCreation basketLineForCreation)
         {
             if (!await _basketRepository.BasketExists(basketId))
             {
@@ -89,10 +87,8 @@ namespace GloboTicket.Services.ShoppingBasket.Controllers
                 basketLineToReturn);
         } 
 
-        [HttpPut("{basketLineId}")]
-        public async Task<ActionResult<BasketLine>> Put(Guid basketId, 
-            Guid basketLineId, 
-            [FromBody] BasketLineForUpdate basketLineForUpdate)
+        [HttpPut("{basketLineId:guid}")]
+        public async Task<ActionResult<BasketLine>> Put(Guid basketId, Guid basketLineId, [FromBody] BasketLineForUpdate basketLineForUpdate)
         {
             if (!await _basketRepository.BasketExists(basketId))
             {
@@ -117,9 +113,8 @@ namespace GloboTicket.Services.ShoppingBasket.Controllers
             return Ok(_mapper.Map<BasketLine>(basketLineEntity));
         } 
 
-        [HttpDelete("{basketLineId}")]
-        public async Task<IActionResult> Delete(Guid basketId, 
-            Guid basketLineId)
+        [HttpDelete("{basketLineId:guid}")]
+        public async Task<IActionResult> Delete(Guid basketId, Guid basketLineId)
         {
             if (!await _basketRepository.BasketExists(basketId))
             {
